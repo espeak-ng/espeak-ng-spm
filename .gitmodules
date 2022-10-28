@@ -1,0 +1,9 @@
+[submodule "Sources/kissfft/_repo"]
+	path = Sources/kissfft/_repo
+	url = https://github.com/mborgerding/kissfft
+[submodule "Sources/libsonic/_repo"]
+	path = Sources/libsonic/_repo
+	url = https://github.com/waywardgeek/sonic
+[submodule "Sources/libespeak-ng/_repo"]
+	path = Sources/libespeak-ng/_repo
+	url = https://github.com/espeak-ng/espeak-ng
