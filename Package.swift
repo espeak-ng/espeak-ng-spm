@@ -7,6 +7,7 @@ let package = Package(
   name: "espeak-ng",
   products: [
     .library(name: "libespeak-ng", targets: ["libespeak-ng"]),
+    .library(name: "espeak-ng-data", targets: ["data"]),
   ],
   targets: [
     .target(name: "kissfft", exclude: [ "_repo" ]),
@@ -20,17 +21,20 @@ let package = Package(
       ]
     ),
     .target(
+      name: "data",
+      resources: [
+        .copy("espeak-ng-data"),
+        .copy("phsource"),
+        .copy("dictsource"),
+      ]
+    ),
+    .target(
       name: "libespeak-ng",
       dependencies: [ "libsonic" ],
       exclude: [
         "_repo",
         "ucd/tests",
         "src/sPlayer.c",
-      ],
-      resources: [
-        .copy("espeak-ng-data"),
-        .copy("phsource"),
-        .copy("dictsource"),
       ],
       publicHeadersPath: "include",
       cSettings: [

@@ -13,8 +13,8 @@ const NSErrorDomain EspeakErrorDomain = @"EspeakErrorDomain";
   if (![fm fileExistsAtPath:dataRoot.path]) {
     nullout = fopen("/dev/null", "w");
 
-    NSBundle *bundle = [NSBundle bundleWithPath:@"espeak-ng_libespeak-ng.bundle"];
-    if (!bundle) bundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"espeak-ng_libespeak-ng" withExtension:@"bundle"]];
+    NSBundle *bundle = [NSBundle bundleWithPath:@"espeak-ng_data.bundle"];
+    if (!bundle) bundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"espeak-ng_data" withExtension:@"bundle"]];
     NSURL *bdl = [bundle resourceURL];
     if (![fm copyItemAtURL:[bdl URLByAppendingPathComponent:@"espeak-ng-data"] toURL:dataRoot error:error]) return NO;
     espeak_ng_InitializePath([root.path cStringUsingEncoding:NSUTF8StringEncoding]);
