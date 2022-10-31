@@ -43,6 +43,7 @@ let package = Package(
         .headerSearchPath("_repo/src/include/compat"),
         .headerSearchPath("_repo/src/ucd-tools/src/include"),
         .define("ESPEAK_NG_API", to: ""),
+        .define("INCLUDE_KLATT", to: "1"),
         .define("N_PATH_HOME", to: "1024"),
       ]
     ),
