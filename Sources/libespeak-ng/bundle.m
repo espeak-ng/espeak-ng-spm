@@ -8,14 +8,24 @@ const NSErrorDomain EspeakErrorDomain = @"EspeakErrorDomain";
   NSFileManager *fm = [NSFileManager defaultManager];
   NSURL *dataRoot = [root URLByAppendingPathComponent:@"espeak-ng-data"];
 
-  FILE *nullout = nil;
+  NSBundle *bundle = [NSBundle bundleWithPath:@"espeak-ng_data.bundle"];
+  if (!bundle) bundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"espeak-ng_data" withExtension:@"bundle"]];
+  NSURL *bdl = [bundle resourceURL];
 
+
+  NSURL *bundleCheckURL = [[bundle.resourceURL URLByAppendingPathComponent:@"phsource"] URLByAppendingPathComponent:@"phonemes"];
+  NSDate *bundleDate = [[fm attributesOfItemAtPath:bundleCheckURL.path error:nil] objectForKey:NSFileModificationDate];
+  NSDate *installDate = [[fm attributesOfItemAtPath:dataRoot.path error:nil] objectForKey:NSFileModificationDate];
+
+  if (installDate && bundleDate && [bundleDate compare:installDate] == NSOrderedDescending) {
+    [fm removeItemAtURL:dataRoot error:nil];
+    NSLog(@"UPDATE DATA: %@ -> %@", installDate, bundleDate);
+  }
+
+  FILE *nullout = nil;
   if (![fm fileExistsAtPath:dataRoot.path]) {
     nullout = fopen("/dev/null", "w");
 
-    NSBundle *bundle = [NSBundle bundleWithPath:@"espeak-ng_data.bundle"];
-    if (!bundle) bundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"espeak-ng_data" withExtension:@"bundle"]];
-    NSURL *bdl = [bundle resourceURL];
     if (![fm copyItemAtURL:[bdl URLByAppendingPathComponent:@"espeak-ng-data"] toURL:dataRoot error:error]) return NO;
     espeak_ng_InitializePath([root.path cStringUsingEncoding:NSUTF8StringEncoding]);
     NSString *ph_root = [bdl URLByAppendingPathComponent:@"phsource" isDirectory:YES].path;
