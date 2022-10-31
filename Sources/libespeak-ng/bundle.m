@@ -19,7 +19,20 @@ const NSErrorDomain EspeakErrorDomain = @"EspeakErrorDomain";
     if (![fm copyItemAtURL:[bdl URLByAppendingPathComponent:@"espeak-ng-data"] toURL:dataRoot error:error]) return NO;
     espeak_ng_InitializePath([root.path cStringUsingEncoding:NSUTF8StringEncoding]);
     NSString *ph_root = [bdl URLByAppendingPathComponent:@"phsource" isDirectory:YES].path;
-    NSString *dict_root = [bdl URLByAppendingPathComponent:@"dictsource" isDirectory:YES].path;
+    NSURL *dictbdl_root = [bdl URLByAppendingPathComponent:@"dictsource" isDirectory:YES];
+    NSURL *dict_temp;
+    NSString *dict_root = dictbdl_root.path;
+    if ([fm fileExistsAtPath:[dictbdl_root URLByAppendingPathComponent:@"extra"].path]) {
+      dict_temp = [[fm temporaryDirectory] URLByAppendingPathComponent:@"dictsource" isDirectory:YES];
+      [fm removeItemAtURL:dict_temp error:nil];
+      if (![fm copyItemAtURL:dictbdl_root toURL:dict_temp error:error]) return NO;
+      NSArray<NSURL*> *extra_dicts = [fm contentsOfDirectoryAtURL:[dictbdl_root URLByAppendingPathComponent:@"extra"] includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsSubdirectoryDescendants error:error];
+      if (!extra_dicts) return NO;
+      for (NSURL *u in extra_dicts) {
+        if (![fm copyItemAtURL:u toURL:[dict_temp URLByAppendingPathComponent:u.lastPathComponent] error:error]) return NO;
+      }
+      dict_root = dict_temp.path;
+    }
 
     espeak_ng_STATUS res;
     char errorbuf[256];
@@ -58,6 +71,7 @@ const NSErrorDomain EspeakErrorDomain = @"EspeakErrorDomain";
       }
     }
     fclose(nullout);
+    if (dict_temp) [fm removeItemAtURL:dict_temp error:nil];
   }
   return YES;
 fail:
