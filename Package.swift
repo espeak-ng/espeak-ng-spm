@@ -10,14 +10,10 @@ let package = Package(
     .library(name: "espeak-ng-data", targets: ["data"]),
   ],
   targets: [
-    .target(name: "kissfft", exclude: [ "_repo" ]),
     .target(
       name: "libsonic",
-      dependencies: [ "kissfft" ],
       exclude: [ "_repo" ],
       cSettings: [
-        .define("KISS_FFT", to: "1"),
-        .define("SONIC_SPECTROGRAM", to: "1"),
       ]
     ),
     .target(
