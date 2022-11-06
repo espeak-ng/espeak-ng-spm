@@ -30,7 +30,6 @@ let package = Package(
       exclude: [
         "_repo",
         "ucd/tests",
-        "src/sPlayer.c",
       ],
       publicHeadersPath: "include",
       cSettings: [
@@ -40,6 +39,7 @@ let package = Package(
         .headerSearchPath("_repo/src/ucd-tools/src/include"),
         .define("ESPEAK_NG_API", to: ""),
         .define("INCLUDE_KLATT", to: "1"),
+        .define("INCLUDE_SPEECHPLAYER", to: "1"),
         .define("N_PATH_HOME", to: "1024"),
       ]
     ),
