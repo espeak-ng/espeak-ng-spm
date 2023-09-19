@@ -17,6 +17,11 @@ let package = Package(
       ]
     ),
     .target(
+      name: "libucd",
+      cSettings: [
+      ]
+    ),
+    .target(
       name: "data",
       resources: [
         .copy("espeak-ng-data"),
@@ -26,17 +31,14 @@ let package = Package(
     ),
     .target(
       name: "libespeak-ng",
-      dependencies: [ "libsonic" ],
+      dependencies: [ "libsonic", "libucd" ],
       exclude: [
         "_repo",
-        "ucd/tests",
       ],
       publicHeadersPath: "include",
       cSettings: [
         .headerSearchPath("."),
         .headerSearchPath("_repo/src/include"),
-        .headerSearchPath("_repo/src/include/compat"),
-        .headerSearchPath("_repo/src/ucd-tools/src/include"),
         .define("ESPEAK_NG_API", to: ""),
         .define("N_PATH_HOME", to: "1024"),
       ]
