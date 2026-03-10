@@ -41,6 +41,7 @@ let package = Package(
         .headerSearchPath("_repo/src/include"),
         .define("ESPEAK_NG_API", to: ""),
         .define("N_PATH_HOME", to: "1024"),
+        .define("PATH_ESPEAK_DATA", to: "\"/espeak-ng-data\""),
       ]
     ),
   ]
